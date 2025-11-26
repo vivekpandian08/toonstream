@@ -24,7 +24,7 @@ LLMs charge by tokens. Verbose JSON wastes tokens and money:
   {"id": 3, "name": "Carol", "dept": "Engineering", "salary": 105000}
 ]
 ```
-**Cost:** 3,914 tokens
+**Cost:** 80 tokens
 
 ### The Solution
 
@@ -36,7 +36,7 @@ employees[3]{id,name,dept,salary}:
 2,Bob,Sales,75000
 3,Carol,Engineering,105000
 ```
-**Cost:** 1,733 tokens (**-55.7%** reduction)
+**Cost:** 38 tokens (**-52.5%** reduction)
 
 ### Why ToonLib?
 
