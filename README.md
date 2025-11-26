@@ -3,7 +3,7 @@
 **Token-Optimized Object Notation (TOON) - Reduce LLM token usage by up to 55% with lossless data serialization**
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/yourusername/toonlib)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/vivekpandian08/toonlib)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/tests-93.3%25-brightgreen.svg)](tests/)
 
@@ -58,9 +58,8 @@ pip install toonlib
 Or from source:
 
 ```bash
-git clone https://github.com/yourusername/toonlib.git
+git clone https://github.com/vivekpandian08/toonlib.git
 cd toonlib
-pip install -e .
 pip install -e .
 ```
 
