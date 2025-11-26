@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "toonlib"
+version = "1.0.0"
+description = "Token Oriented Object Notation - Efficient data serialization for LLMs"
+readme = "README.md"
+dynamic = []
+requires-python = ">=3.8"
+
+[tool.setuptools]
+packages = ["toonlib"]
