@@ -1,0 +1,48 @@
+{
+  "benchmark_settings": {
+    "tokenizer": {
+      "model": "gpt-3.5-turbo",
+      "encoding": "cl100k_base"
+    },
+    "datasets": {
+      "flat_data": {
+        "file": "data/employees-flat.json",
+        "description": "50 employee records with uniform flat structure",
+        "formats_to_test": ["toon", "json_compact", "json_pretty"]
+      },
+      "arrays_of_objects": {
+        "file": "data/github-repos.json",
+        "description": "100 GitHub repositories with uniform object structure",
+        "formats_to_test": ["toon", "json_compact", "json_pretty"]
+      },
+      "nested_structures": {
+        "file": "data/orders-nested.json",
+        "description": "10 customer orders with nested objects and arrays",
+        "formats_to_test": ["csv_flattened", "toon", "json_compact", "json_pretty"]
+      },
+      "deep_nested": {
+        "file": "data/configs-deep-nested.json",
+        "description": "20 microservice configurations with 9 levels of nesting",
+        "formats_to_test": ["toon_original", "toon_optimized", "json_compact", "json_pretty"]
+      }
+    },
+    "optimization_thresholds": {
+      "min_array_size_for_tabular": 3,
+      "max_field_heterogeneity": 0.3,
+      "max_nesting_depth_for_tabular": 3
+    }
+  },
+  "output_settings": {
+    "results_folder": "results",
+    "generate_charts": false,
+    "save_encoded_samples": true,
+    "verbose_output": true
+  },
+  "comparison_settings": {
+    "baseline_format": "json_compact",
+    "show_character_counts": true,
+    "show_token_counts": true,
+    "show_processing_time": true,
+    "display_format": "table"
+  }
+}
