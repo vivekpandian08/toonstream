@@ -37,6 +37,28 @@ These are the original standalone comparison scripts, now consolidated into `run
 - **`compare_deep_nested.py`** - Deeply nested configuration comparison
 - **`test_optimization.py`** - Original vs Optimized encoder comparison
 
+## Tokenizer Configuration
+
+**Current Tokenizer:** `gpt-3.5-turbo` (OpenAI `cl100k_base` encoding)
+
+The benchmarks use OpenAI's `cl100k_base` tokenizer, which is compatible with GPT-3.5 and GPT-4 models.
+
+### Open-Source LLM Alternatives
+
+You can modify `config.json` to test with other tokenizers if you have them installed:
+
+```python
+# For LLaMA/Mistral models, install: pip install transformers
+"tokenizer": {
+  "model": "meta-llama/Llama-2-7b",  # or mistralai/Mistral-7B
+  "encoding": "transformers"
+}
+
+# For other models, you can create a custom tokenizer wrapper
+```
+
+**Note:** Token counts will vary between tokenizers, but the relative efficiency (TOON vs JSON) remains consistent across models.
+
 ## Configuration
 
 Edit `config.json` to customize:
