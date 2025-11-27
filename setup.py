@@ -1,5 +1,5 @@
 """
-Setup script for toonlib package.
+Setup script for toonstream package.
 
 Installation:
     pip install -e .  # Development install
@@ -12,17 +12,17 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="toonlib",
+    name="toonstream",
     version="1.0.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Vivek Pandian",
+    author_email="vivekpandian08@gmail.com",
     description="Token Oriented Object Notation - Efficient data serialization for LLMs",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/toonlib",
+    url="https://github.com/vivekpandian08/toonstream",
     packages=find_packages(),
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Text Processing :: Markup",
@@ -54,8 +54,8 @@ setup(
     },
     keywords="toon json serialization tokens llm optimization csv tabular",
     project_urls={
-        "Bug Reports": "https://github.com/yourusername/toonlib/issues",
-        "Source": "https://github.com/yourusername/toonlib",
-        "Documentation": "https://github.com/yourusername/toonlib#readme",
+        "Bug Reports": "https://github.com/vivekpandian08/toonstream/issues",
+        "Source": "https://github.com/vivekpandian08/toonstream",
+        "Documentation": "https://github.com/vivekpandian08/toonstream#readme",
     },
 )

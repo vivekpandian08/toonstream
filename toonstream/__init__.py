@@ -27,15 +27,15 @@ Performance:
 
 Usage:
     Basic encoding (with smart optimization, recommended):
-    >>> from toonlib import encode
+    >>> from toonstream import encode
     >>> toon_str = encode(data)
     
     Legacy mode (always use tabular, no optimization):
-    >>> from toonlib import encode
+    >>> from toonstream import encode
     >>> toon_str = encode(data, smart_optimize=False)
     
     Decoding:
-    >>> from toonlib import decode
+    >>> from toonstream import decode
     >>> data = decode(toon_str)
 
 Modules:

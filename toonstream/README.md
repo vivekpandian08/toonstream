@@ -1,4 +1,4 @@
-# Toonlib Core Library
+# Toonstream Core Library
 
 Core implementation of the TOON format encoder and decoder.
 
@@ -48,20 +48,20 @@ The decoder parses TOON format back to Python objects:
 ### Exceptions (`exceptions.py`)
 
 Custom exception hierarchy:
-- `ToonLibError` - Base exception
+- `ToonStreamError` - Base exception
 - `EncodingError` - Encoding failures
 - `DecodingError` - Decoding failures
 
 ## Public API
 
 ```python
-import toonlib
+import toonstream
 
 # Encode
-toon_str = toonlib.encode(data, smart_optimize=True)
+toon_str = toonstream.encode(data, smart_optimize=True)
 
 # Decode
-data = toonlib.decode(toon_str)
+data = toonstream.decode(toon_str)
 ```
 
 ## Configuration

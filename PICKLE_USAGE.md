@@ -5,7 +5,7 @@ Save and load Python data using TOON format with pickle serialization.
 ## Quick Start
 
 ```python
-from toonlib import save_toon_pickle, load_toon_pickle
+from toonstream import save_toon_pickle, load_toon_pickle
 
 # Save data
 data = {'users': [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]}

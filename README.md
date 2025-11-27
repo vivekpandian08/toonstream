@@ -1,17 +1,17 @@
-# 🎨 ToonLib
+# 🎨 ToonStream
 
-**Token-Optimized Object Notation (TOON) - Reduce LLM token usage by up to 55% with lossless data serialization**
+**Token-Oriented Object Notation (TOON) - Reduce LLM token usage by up to 55% with lossless data serialization**
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/vivekpandian08/toonlib)
+[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/vivekpandian08/toonstream)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-93.3%25-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-100%25-brightgreen.svg)](tests/)
 
 ---
 
-## 📖 What is ToonLib?
+## 📖 What is ToonStream?
 
-**ToonLib** is a Python library for encoding structured data in a token-efficient format designed for Large Language Models (LLMs). It converts repetitive JSON structures into compact, tabular representations that dramatically reduce token count while maintaining 100% lossless conversion.
+**ToonStream** is a Python library for encoding structured data in a token-efficient format designed for Large Language Models (LLMs). It converts repetitive JSON structures into compact, tabular representations that dramatically reduce token count while maintaining 100% lossless conversion.
 
 ### The Problem
 
@@ -38,7 +38,7 @@ employees[3]{id,name,dept,salary}:
 ```
 **Cost:** 38 tokens (**-52.5%** reduction)
 
-### Why ToonLib?
+### Why ToonStream?
 
 ✅ **Save Money** - Reduce API costs by up to 55% on structured data  
 ✅ **100% Lossless** - Perfect round-trip conversion, no data loss  
@@ -52,25 +52,25 @@ employees[3]{id,name,dept,salary}:
 ## 🚀 Installation
 
 ```bash
-pip install toonlib
+pip install toonstream
 ```
 
 Or from source:
 
 ```bash
-git clone https://github.com/vivekpandian08/toonlib.git
-cd toonlib
+git clone https://github.com/vivekpandian08/toonstream.git
+cd toonstream
 pip install -e .
 ```
 
 **Requirements:**
-- Python 3.7 or higher
-- No external dependencies (tiktoken optional for token counting)
+- Python 3.8 or higher
+- No external dependencies (tiktoken optional for benchmarks)
 
 ### Basic Usage
 
 ```python
-import toonlib
+import toonstream
 
 # Your data
 data = {
@@ -80,7 +80,7 @@ data = {
 }
 
 # Encode to TOON
-toon_str = toonlib.encode(data)
+toon_str = toonstream.encode(data)
 print(toon_str)
 ```
 
@@ -102,7 +102,7 @@ skills: [
 ### Basic Usage
 
 ```python
-from toonlib import encode, decode
+from toonstream import encode, decode
 
 # Your data
 data = {
@@ -204,22 +204,41 @@ This includes:
 
 ```bash
 # Run tests
-pytest tests/
+pytest tests/test_toonstream.py
 
 # Run benchmarks
 python benchmarks/run_all_comparisons.py
 
 # Try the tutorial
-jupyter notebook examples/toonlib_tutorial.ipynb
+jupyter notebook examples/toonstream_tutorial.ipynb
 ```
 
 ### Project Structure
 
 ```
+toonstream/
+├── toonstream/           # Core library
+│   ├── __init__.py       # Public API exports
+│   ├── encoder.py        # TOON encoder (485 lines)
+│   ├── decoder.py        # TOON decoder (533 lines)
+│   ├── exceptions.py     # Exception hierarchy (60 lines)
+│   └── pickle_utils.py   # Pickle integration (177 lines)
+├── benchmarks/           # Performance tests
+├── tests/                # Test suite (51 tests, 100% passing)
+├── examples/             # Usage examples
+├── data/                 # Benchmark datasets
+├── results/              # Benchmark results
+├── README.md             # This file
+├── PICKLE_USAGE.md       # Pickle utilities guide
+├── pyproject.toml        # Modern package configuration
+├── setup.py              # Package configuration
+└── requirements.txt      # Dependencies
+```
 
+### 1. LLM Context Optimization
 
 ```python
-import toonlib
+import toonstream
 
 # Pass structured data to LLM
 context = {
@@ -229,7 +248,7 @@ context = {
 }
 
 # Reduce prompt tokens by 40%
-toon_context = toonlib.encode(context)
+toon_context = toonstream.encode(context)
 response = llm.complete(f"Analyze this data:\n{toon_context}")
 ```
 
@@ -238,7 +257,7 @@ response = llm.complete(f"Analyze this data:\n{toon_context}")
 Save data with TOON encoding for additional compression:
 
 ```python
-from toonlib import save_toon_pickle, load_toon_pickle
+from toonstream import save_toon_pickle, load_toon_pickle
 
 # Save with TOON encoding
 data = {"users": [...], "logs": [...]}
@@ -253,7 +272,7 @@ loaded = load_toon_pickle('data.toon.pkl')
 ### 3. API Response Optimization
 
 ```python
-from toonlib import encode
+from toonstream import encode
 from flask import Flask, Response
 
 app = Flask(__name__)
@@ -270,7 +289,7 @@ def get_employees():
 ### 4. Configuration Files
 
 ```python
-import toonlib
+import toonstream
 
 config = {
     "database": {"host": "localhost", "port": 5432},
@@ -279,11 +298,11 @@ config = {
 
 # Save human-readable config
 with open('config.toon', 'w') as f:
-    f.write(toonlib.encode(config, indent=2))
+    f.write(toonstream.encode(config, indent=2))
 
 # Load config
 with open('config.toon') as f:
-    config = toonlib.decode(f.read())
+    config = toonstream.decode(f.read())
 ```
 
 ---
@@ -292,7 +311,7 @@ with open('config.toon') as f:
 
 ### Core Functions
 
-#### `encode(obj, compact=False, smart_optimize=True, indent=None)`
+#### `encode(obj, compact=False, smart_optimize=True, indent=None, sort_keys=False)`
 
 Convert Python object to TOON format.
 
@@ -301,6 +320,7 @@ Convert Python object to TOON format.
 - `compact` (bool): Minimize whitespace (default: False)
 - `smart_optimize` (bool): Auto-detect best format (default: True)
 - `indent` (int): Indentation spaces, None for compact (default: None)
+- `sort_keys` (bool): Sort dictionary keys alphabetically (default: False)
 
 **Returns:** `str` - TOON formatted string
 
@@ -312,6 +332,9 @@ toon = encode(data)
 
 # Compact output
 toon = encode(data, compact=True)
+
+# Sort dictionary keys
+toon = encode(data, sort_keys=True)
 
 # Always use tabular (no optimization)
 toon = encode(data, smart_optimize=False)
@@ -353,7 +376,7 @@ Save data as TOON-encoded pickle file.
 - `protocol` (int): Pickle protocol version (default: HIGHEST_PROTOCOL)
 
 ```python
-from toonlib import save_toon_pickle
+from toonstream import save_toon_pickle
 
 save_toon_pickle(data, 'data.toon.pkl')
 ```
@@ -369,7 +392,7 @@ Load TOON-encoded pickle file.
 **Returns:** `Any` - Loaded Python object
 
 ```python
-from toonlib import load_toon_pickle
+from toonstream import load_toon_pickle
 
 data = load_toon_pickle('data.toon.pkl')
 ```
@@ -393,10 +416,10 @@ data = load_toon_pickle('data.toon.pkl')
 pip install -e ".[dev]"
 
 # Run all tests
-pytest tests/ -v
+pytest tests/test_toonstream.py -v
 
 # Run with coverage
-pytest tests/ --cov=toonlib --cov-report=html
+pytest tests/ --cov=toonstream --cov-report=html
 
 # Open coverage report
 open htmlcov/index.html
@@ -414,26 +437,28 @@ python benchmarks/run_all_comparisons.py
 ### Project Structure
 
 ```
-toonlib/
-├── toonlib/              # Core library
+toonstream/
+├── toonstream/           # Core library
 │   ├── __init__.py       # Public API exports
-│   ├── encoder.py        # TOON encoder (480 lines)
-│   ├── decoder.py        # TOON decoder (530 lines)
-│   ├── exceptions.py     # Exception hierarchy
-│   └── pickle_utils.py   # Pickle integration (170 lines)
+│   ├── encoder.py        # TOON encoder (485 lines)
+│   ├── decoder.py        # TOON decoder (533 lines)
+│   ├── exceptions.py     # Exception hierarchy (60 lines)
+│   └── pickle_utils.py   # Pickle integration (177 lines)
 ├── benchmarks/           # Performance tests
 │   ├── run_all_comparisons.py
 │   └── config.json
-├── tests/                # Test suite (45 tests, 93.3% passing)
-│   └── test_toonlib.py
+├── tests/                # Test suite (51 tests, 100% passing)
+│   └── test_toonstream.py
 ├── examples/             # Usage examples
-│   ├── basic_usage.py
-│   ├── advanced_optimization.py
-│   └── pickle_example.py
+│   ├── basic_example.py
+│   ├── advanced_example.py
+│   ├── pickle_example.py
+│   └── toonstream_tutorial.ipynb
 ├── data/                 # Benchmark datasets
 ├── results/              # Benchmark results
 ├── README.md             # This file
 ├── PICKLE_USAGE.md       # Pickle utilities guide
+├── pyproject.toml        # Modern package configuration
 ├── setup.py              # Package configuration
 └── requirements.txt      # Dependencies
 ```
@@ -444,15 +469,16 @@ toonlib/
 
 See the `examples/` directory for complete examples:
 
-- **basic_usage.py** - Getting started guide
-- **advanced_optimization.py** - Smart optimization features
+- **basic_example.py** - Getting started guide
+- **advanced_example.py** - Smart optimization features
 - **pickle_example.py** - Pickle integration demo
+- **toonstream_tutorial.ipynb** - Interactive Jupyter notebook tutorial
 
 Run them:
 
 ```bash
-python examples/basic_usage.py
-python examples/advanced_optimization.py
+python examples/basic_example.py
+python examples/advanced_example.py
 python examples/pickle_example.py
 ```
 
@@ -462,17 +488,17 @@ python examples/pickle_example.py
 
 Contributions welcome! Areas for improvement:
 
-1. **Edge Cases** - Special characters in keys, empty string validation
-2. **Features** - CLI tool, streaming encoder, sort_keys parameter
+1. **Additional Features** - CLI tool, streaming encoder, additional format options
+2. **Performance** - C extension for faster encoding/decoding
 3. **Documentation** - More examples, integration guides
-4. **Performance** - Additional optimizations for specific data types
+4. **Language Bindings** - JavaScript, Go, Rust implementations
 
 ### Development Setup
 
 ```bash
 # Fork and clone
-git clone https://github.com/yourusername/toonlib.git
-cd toonlib
+git clone https://github.com/vivekpandian08/toonstream.git
+cd toonstream
 
 # Create branch
 git checkout -b feature/your-feature
@@ -504,477 +530,21 @@ MIT License - see [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues:** [GitHub Issues](https://github.com/yourusername/toonlib/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/yourusername/toonlib/discussions)
+- **Issues:** [GitHub Issues](https://github.com/vivekpandian08/toonstream/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/vivekpandian08/toonstream/discussions)
 - **Documentation:** See `PICKLE_USAGE.md` and `results/OPTIMIZATION_GUIDE.md`
 
 ---
 
 ## 🔗 Links
 
-- **PyPI:** https://pypi.org/project/toonlib/ (coming soon)
-- **GitHub:** https://github.com/yourusername/toonlib
-- **Documentation:** https://toonlib.readthedocs.io/ (coming soon)
+- **PyPI:** https://pypi.org/project/toonstream/
+- **GitHub:** https://github.com/vivekpandian08/toonstream
+- **Repository:** https://github.com/vivekpandian08/toonstream
+- **Issues:** https://github.com/vivekpandian08/toonstream/issues
 
 ---
 
 **Made with ❤️ for the LLM community**
 
 *Save tokens. Save money. Build better.*
-• Smart Optimizer: Detects homogeneous arrays and applies tabular format
-• Type System: Preserves all JSON types during conversion
-• Parser: Indentation-aware recursive descent parser
-```
-
----
-
-## 📊 Benchmarks
-
-Run comprehensive benchmarks:
-
-```bash
-python benchmarks/run_all_comparisons.py
-```
-
-### Performance Results
-
-**Dataset: 200 employees + 150 projects**
-
-| Format | Characters | Tokens | vs JSON Compact |
-|--------|-----------|--------|-----------------|
-| JSON Pretty | 52,340 | 14,250 | +30% |
-| JSON Compact | 40,230 | 10,958 | baseline |
-| **TOON** | **18,327** | **6,686** | **-39%** 🏆 |
-
-**Encoding Speed:**
-- Small objects (<1KB): <1ms
-- Large arrays (1000 items): 10-50ms
-- Deep nesting (10 levels): 5-20ms
-
-**Decoding Speed:**
-- Small TOON (<1KB): <1ms
-- Large TOON (10KB): 10-30ms
-- Complex structures: 20-50ms
-
----
-
-## 🧪 Testing
-
-Comprehensive test suite with 100% coverage:
-
-```bash
-# Run all tests
-pytest tests/
-
-# Run with coverage
-pytest tests/ --cov=toonlib --cov-report=html
-
-# Run specific test file
-pytest tests/test_encoder.py
-```
-
-**Test Coverage:**
-- ✅ All primitive types (str, int, float, bool, null)
-- ✅ Nested structures (arrays, objects, deep nesting)
-- ✅ Edge cases (empty values, Unicode, special chars)
-- ✅ Smart optimization (tabular arrays)
-- ✅ Round-trip conversion (encode → decode)
-- ✅ Error handling (invalid input, malformed TOON)
-
----
-
-## 📖 Documentation
-
-### API Reference
-
-#### `encode(data, smart_optimize=True)`
-
-Convert Python object to TOON format.
-
-**Parameters:**
-- `data` (dict|list|str|int|float|bool|None): Python object to encode
-- `smart_optimize` (bool): Enable automatic tabular optimization (default: True)
-
-**Returns:**
-- `str`: TOON formatted string
-
-**Example:**
-```python
-toon_str = toonlib.encode(data, smart_optimize=True)
-```
-
----
-
-#### `decode(toon_str)`
-
-Convert TOON format back to Python object.
-
-**Parameters:**
-- `toon_str` (str): TOON formatted string
-
-**Returns:**
-- `dict|list|str|int|float|bool|None`: Parsed Python object
-
-**Raises:**
-- `DecodingError`: If TOON format is invalid
-
-**Example:**
-```python
-data = toonlib.decode(toon_str)
-```
-
----
-
-### TOON Format Specification
-
-#### Basic Syntax
-
-```
-# Key-value pairs
-name: "Alice"
-age: 30
-active: true
-score: 3.14
-value: null
-
-# Arrays
-skills: [
-  - "Python"
-  - "JavaScript"
-]
-
-# Objects
-address: {
-  city: "NYC"
-  zip: 10001
-}
-```
-
-#### Tabular Arrays (Smart Optimization)
-
-```
-employees: [
-  - {id, name, salary}
-  - 1, "Alice", 95000
-  - 2, "Bob", 75000
-]
-```
-
-**Requirements for tabular format:**
-- Array length ≥ 3 (configurable)
-- Objects have similar keys (≤30% difference)
-- Automatically applied with `smart_optimize=True`
-
----
-
-## 🎯 Use Cases
-
-### 1. LLM Token Optimization
-Reduce input tokens for GPT/Claude/etc. API calls:
-```python
-import toonlib
-
-# Convert large JSON context to TOON
-context_json = load_large_context()
-context_toon = toonlib.encode(context_json, smart_optimize=True)
-
-# Save 39% on tokens → lower costs!
-response = openai.ChatCompletion.create(
-    messages=[{"role": "user", "content": f"Context: {context_toon}\n\nQuestion: ..."}]
-)
-```
-
-### 2. Data Storage Compression
-Reduce storage costs for JSON-heavy databases:
-```python
-# Before: 100GB of JSON logs
-# After: 55GB of TOON logs
-# Savings: 45GB × $0.023/GB/month = $1.04/month (S3 Standard)
-```
-
-### 3. API Bandwidth Reduction
-Lower data transfer costs:
-```python
-# API response: 500KB JSON → 275KB TOON (45% reduction)
-# 1M requests/month: 225GB saved
-# CDN savings: 225GB × $0.085/GB = $19.13/month
-```
-
-### 4. Configuration Files
-Human-readable configs with type safety:
-```python
-# config.toon is more readable than config.json
-# Still machine-parseable with toonlib.decode()
-```
-
----
-
-## 🤝 Contributing
-
-Contributions welcome! Please follow these guidelines:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Add tests** for new functionality
-4. **Ensure** all tests pass (`pytest tests/`)
-5. **Commit** changes (`git commit -m 'Add amazing feature'`)
-6. **Push** to branch (`git push origin feature/amazing-feature`)
-7. **Open** a Pull Request
-
-### Development Setup
-
-```bash
-git clone https://github.com/yourusername/toonlib.git
-cd toonlib
-pip install -e ".[dev]"
-pytest tests/
-```
-
----
-
-## 📋 Roadmap
-
-- [x] Core encoder/decoder
-- [x] Smart tabular optimization
-- [x] Comprehensive test suite
-- [x] Performance benchmarks
-- [ ] CLI tool for JSON ↔ TOON conversion
-- [ ] VS Code syntax highlighting extension
-- [ ] Streaming parser for large files
-- [ ] C extension for 10x performance boost
-- [ ] Language bindings (JavaScript, Go, Rust)
-
----
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- Inspired by YAML's readability and JSON's simplicity
-- Optimized for the token-constrained world of LLMs
-- Built with ❤️ for developers who care about efficiency
-
----
-
-## 📞 Support & Contact
-
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/toonlib/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/toonlib/discussions)
-- 📧 **Email**: your.email@example.com
-- 🌟 **Star** this repo if you find it useful!
-
----
-
-## 🔗 Links
-
-- [Documentation](docs/)
-- [Examples](examples/)
-- [Benchmarks](benchmarks/)
-- [Changelog](CHANGELOG.md)
-- [Contributing Guide](CONTRIBUTING.md)
-
----
-
-**Made with 🎨 by [Your Name]** | **Token efficiency for the modern web**
-
-```python
-import toonlib
-
-# Python object to TOON
-data = {
-    "name": "John Doe",
-    "age": 30,
-    "active": True,
-    "hobbies": ["reading", "coding"]
-}
-
-# Encode to TOON (compact format)
-toon_str = toonlib.encode(data, indent=0)
-print(toon_str)
-# Output: {"name": "John Doe", "age": 30, "active": true, "hobbies": ["reading", "coding"]}
-
-# Encode to TOON (pretty format)
-toon_str = toonlib.encode(data, indent=2)
-print(toon_str)
-# Output:
-# {
-#   "name": "John Doe",
-#   "age": 30,
-#   "active": true,
-#   "hobbies": [
-#     "reading",
-#     "coding"
-#   ]
-# }
-
-# Decode TOON back to Python
-decoded = toonlib.decode(toon_str)
-print(decoded == data)  # True - lossless conversion
-```
-
-### Advanced Usage
-
-```python
-import toonlib
-from toonlib import ToonEncoder, ToonDecoder, ToonEncodeError, ToonDecodeError
-
-# Using encoder class with options
-encoder = ToonEncoder(indent=2, sort_keys=True)
-toon_str = encoder.encode({"z": 1, "a": 2})
-
-# Using decoder class
-decoder = ToonDecoder(strict=True)
-data = decoder.decode(toon_str)
-
-# Error handling
-try:
-    toonlib.encode(float('nan'))  # NaN not supported
-except ToonEncodeError as e:
-    print(f"Encoding error: {e}")
-
-try:
-    toonlib.decode("{invalid}")  # Invalid TOON
-except ToonDecodeError as e:
-    print(f"Decoding error: {e}")
-```
-
-## TOON Format Specification
-
-TOON uses a JSON-like syntax:
-
-- **Strings**: `"value"` (with escape sequences: `\"`, `\\`, `\/`, `\b`, `\f`, `\n`, `\r`, `\t`, `\uXXXX`)
-- **Numbers**: `123`, `123.456`, `-123`, `1.23e10`
-- **Booleans**: `true`, `false`
-- **Null**: `null`
-- **Arrays**: `[item1, item2, item3]`
-- **Objects**: `{"key1": value1, "key2": value2}`
-
-## API Reference
-
-### Functions
-
-#### `encode(obj, indent=2, sort_keys=False)`
-Encode a Python object to TOON format.
-
-**Parameters:**
-- `obj` (Any): Python object to encode
-- `indent` (int): Number of spaces for indentation (0 for compact)
-- `sort_keys` (bool): Whether to sort object keys alphabetically
-
-**Returns:** TOON formatted string
-
-**Raises:** `ToonEncodeError` if encoding fails
-
-#### `decode(toon_str, strict=True)`
-Decode a TOON string to a Python object.
-
-**Parameters:**
-- `toon_str` (str): TOON formatted string
-- `strict` (bool): Whether to enforce strict TOON validation
-
-**Returns:** Python object
-
-**Raises:** `ToonDecodeError` if decoding fails
-
-### Classes
-
-#### `ToonEncoder(indent=2, sort_keys=False)`
-Encoder class for converting Python objects to TOON format.
-
-**Methods:**
-- `encode(obj)`: Encode a Python object to TOON
-
-#### `ToonDecoder(strict=True)`
-Decoder class for converting TOON strings to Python objects.
-
-**Methods:**
-- `decode(toon_str)`: Decode a TOON string to Python
-
-### Exceptions
-
-- `ToonError`: Base exception for all TOON-related errors
-- `ToonEncodeError`: Raised when encoding fails
-- `ToonDecodeError`: Raised when decoding fails
-- `ToonValidationError`: Raised when validation fails
-
-## Examples
-
-Run the included examples:
-
-```bash
-# Basic example
-python examples/basic_example.py
-
-# Advanced example with error handling and edge cases
-python examples/advanced_example.py
-```
-
-## Running Tests
-
-```bash
-# Run all tests
-python -m pytest tests/
-
-# Run with coverage
-python -m pytest tests/ --cov=toonlib --cov-report=html
-
-# Run specific test class
-python -m pytest tests/test_toonlib.py::TestPrimitiveTypes
-
-# Run with verbose output
-python -m pytest tests/ -v
-```
-
-## Project Structure
-
-```
-toonlib/
-├── toonlib/
-│   ├── __init__.py       # Package initialization
-│   ├── encoder.py        # JSON to TOON encoder
-│   ├── decoder.py        # TOON to JSON decoder
-│   └── exceptions.py     # Custom exceptions
-├── tests/
-│   └── test_toonlib.py   # Comprehensive unit tests
-├── examples/
-│   ├── basic_example.py      # Basic usage examples
-│   └── advanced_example.py   # Advanced features demo
-├── README.md
-├── setup.py
-└── requirements.txt
-```
-
-## Development
-
-### Phase 1: Core Functionality ✅
-
-- [x] Implement JSON → TOON encoder
-- [x] Implement TOON → JSON decoder
-- [x] Basic validation and error handling
-- [x] Unit tests for primitive types
-- [x] Lossless JSON ↔ TOON conversion
-- [x] All primitive types supported
-- [x] Nested structures handled correctly
-- [x] Edge cases tested (empty, null, special chars)
-
-## Requirements
-
-- Python 3.8 or higher
-- No external dependencies for core functionality
-- pytest (for running tests)
-
-## License
-
-MIT License
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Support
-
-For issues, questions, or contributions, please open an issue on the repository.

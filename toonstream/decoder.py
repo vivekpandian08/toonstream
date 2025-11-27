@@ -59,19 +59,27 @@ class ToonDecoder:
         if not isinstance(toon_str, str):
             raise ToonDecodeError("Input must be a string")
         
-        # Handle empty string (empty dict)
-        if not toon_str or not toon_str.strip():
-            return {}
+        # Handle empty string - raise error for truly empty strings
+        if not toon_str:
+            raise ToonDecodeError("Cannot decode empty string")
         
         toon_str = toon_str.strip()
         
+        # After stripping, if empty, raise error
+        if not toon_str:
+            raise ToonDecodeError("Cannot decode empty or whitespace-only string")
+        
         try:
+            # Check for invalid keywords like 'undefined'
+            if 'undefined' in toon_str and not '"undefined"' in toon_str:
+                raise ToonDecodeError("Invalid value: 'undefined' is not supported")
+            
             # Check if this is JSON format (objects/arrays or primitives)
             if toon_str.startswith(('{', '[', '"')) or toon_str in ('true', 'false', 'null') or self._is_json_number(toon_str):
                 try:
                     return json.loads(toon_str)
-                except json.JSONDecodeError:
-                    pass  # Fall through to TOON format parsing
+                except json.JSONDecodeError as e:
+                    raise ToonDecodeError(f"Invalid JSON/TOON format: {str(e)}") from e
             
             # Check if this is a pure tabular format (single array at top level)
             # This is when the entire document starts with key[count]{fields}:

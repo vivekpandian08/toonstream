@@ -6,8 +6,8 @@ and compares file sizes between TOON pickle and regular pickle.
 """
 
 import os
-import toonlib
-from toonlib import save_toon_pickle, load_toon_pickle, save_pickle, load_pickle
+import toonstream
+from toonstream import save_toon_pickle, load_toon_pickle, save_pickle, load_pickle
 
 # Sample data - typical use case with arrays of objects
 sample_data = {
@@ -69,7 +69,7 @@ print(f"   First employee: {loaded_data['employees'][0]['name']}")
 
 # 7. Show TOON format preview
 print("\n7. TOON format preview:")
-toon_str = toonlib.encode(sample_data)
+toon_str = toonstream.encode(sample_data)
 lines = toon_str.split('\n')
 print("   " + "\n   ".join(lines[:5]))
 if len(lines) > 5:

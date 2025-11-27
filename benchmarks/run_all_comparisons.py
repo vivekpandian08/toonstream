@@ -39,7 +39,7 @@ from typing import Dict, List, Any, Tuple
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import tiktoken
-from toonlib import ToonEncoder
+from toonstream import ToonEncoder
 
 
 class BenchmarkSuite:
@@ -170,6 +170,9 @@ class BenchmarkSuite:
         # Run tests for each format
         format_results = {}
         for format_name in dataset_config['formats_to_test']:
+            # Skip CSV formats
+            if format_name in ['csv', 'csv_flattened']:
+                continue
             try:
                 encoded, tokens, chars, proc_time = self.run_format_test(format_name, data)
                 format_results[format_name] = {

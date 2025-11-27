@@ -40,7 +40,7 @@ Complex hierarchical data:
 
 Data files are used by:
 - `benchmarks/run_all_comparisons.py` - Performance testing
-- `examples/toonlib_tutorial.ipynb` - Tutorial demonstrations
+- `examples/toonstream_tutorial.ipynb` - Tutorial demonstrations
 - `tests/` - Integration tests
 
 ## File Formats

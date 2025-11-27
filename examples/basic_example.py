@@ -1,5 +1,5 @@
 """
-Basic example demonstrating toonlib usage.
+Basic example demonstrating toonstream usage.
 Shows simple JSON to TOON conversion and vice versa.
 """
 
@@ -9,12 +9,12 @@ import os
 # Add parent directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import toonlib
+import toonstream
 
 
 def main():
     print("=" * 60)
-    print("TOONLIB - Basic Example")
+    print("TOONSTREAM - Basic Example")
     print("=" * 60)
     print()
     
@@ -35,19 +35,19 @@ def main():
     print()
     
     # Encode to TOON (compact format)
-    toon_compact = toonlib.encode(simple_data, indent=0)
+    toon_compact = toonstream.encode(simple_data, indent=0)
     print("TOON format (compact):")
     print(toon_compact)
     print()
     
     # Encode to TOON (pretty format)
-    toon_pretty = toonlib.encode(simple_data, indent=2)
+    toon_pretty = toonstream.encode(simple_data, indent=2)
     print("TOON format (pretty):")
     print(toon_pretty)
     print()
     
     # Decode back to Python
-    decoded = toonlib.decode(toon_pretty)
+    decoded = toonstream.decode(toon_pretty)
     print("Decoded back to Python:")
     print(decoded)
     print()
@@ -70,12 +70,12 @@ def main():
     print(array_data)
     print()
     
-    toon_array = toonlib.encode(array_data, indent=2)
+    toon_array = toonstream.encode(array_data, indent=2)
     print("TOON format:")
     print(toon_array)
     print()
     
-    decoded_array = toonlib.decode(toon_array)
+    decoded_array = toonstream.decode(toon_array)
     print(f"Lossless conversion: {array_data == decoded_array}")
     print()
     
@@ -109,12 +109,12 @@ def main():
     print(nested_data)
     print()
     
-    toon_nested = toonlib.encode(nested_data, indent=2)
+    toon_nested = toonstream.encode(nested_data, indent=2)
     print("TOON format:")
     print(toon_nested)
     print()
     
-    decoded_nested = toonlib.decode(toon_nested)
+    decoded_nested = toonstream.decode(toon_nested)
     print(f"Lossless conversion: {nested_data == decoded_nested}")
     print()
     
@@ -135,12 +135,12 @@ def main():
         print(f"  {key}: {repr(value)}")
     print()
     
-    toon_special = toonlib.encode(special_data, indent=2)
+    toon_special = toonstream.encode(special_data, indent=2)
     print("TOON format:")
     print(toon_special)
     print()
     
-    decoded_special = toonlib.decode(toon_special)
+    decoded_special = toonstream.decode(toon_special)
     print(f"Lossless conversion: {special_data == decoded_special}")
     print()
     

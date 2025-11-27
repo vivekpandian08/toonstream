@@ -31,8 +31,15 @@ TOON preserves structure while matching JSON Compact's efficiency.
 import json
 import csv
 import io
+import sys
+import os
+from pathlib import Path
+
+# Add parent directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import tiktoken
-from toonlib import encode
+from toonstream import encode, ToonEncoder
 
 
 def count_tokens(text: str) -> int:

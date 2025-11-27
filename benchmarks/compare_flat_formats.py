@@ -21,8 +21,15 @@ maintaining the structure and readability advantages of object notation.
 import json
 import csv
 import io
+import sys
+import os
+from pathlib import Path
+
+# Add parent directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import tiktoken
-from toonlib import encode
+from toonstream import encode, ToonEncoder
 
 
 def count_tokens(text: str) -> int:

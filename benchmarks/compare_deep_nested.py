@@ -38,7 +38,14 @@ Use Case Guidance:
 
 import json
 import tiktoken
-from toonlib import encode
+import sys
+import os
+from pathlib import Path
+
+# Add parent directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from toonstream import encode, ToonEncoder
 
 
 def count_tokens(text: str) -> int:

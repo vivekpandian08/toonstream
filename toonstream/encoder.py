@@ -455,7 +455,7 @@ class ToonEncoder:
         return str(value)
 
 
-def encode(obj: Any, compact: bool = False, smart_optimize: bool = True, indent: int = None) -> str:
+def encode(obj: Any, compact: bool = False, smart_optimize: bool = True, indent: int = None, sort_keys: bool = False) -> str:
     """
     Convenience function to encode a Python object to TOON format.
     
@@ -464,6 +464,7 @@ def encode(obj: Any, compact: bool = False, smart_optimize: bool = True, indent:
         compact: If True, minimize whitespace (deprecated, use indent=0)
         smart_optimize: If True, apply intelligent optimizations for better token efficiency
         indent: Number of spaces for indentation (0 for compact, None/2 for pretty)
+        sort_keys: If True, sort dictionary keys alphabetically
         
     Returns:
         TOON formatted string
@@ -474,6 +475,10 @@ def encode(obj: Any, compact: bool = False, smart_optimize: bool = True, indent:
     # Handle indent parameter (matches json.dumps API)
     if indent is not None:
         compact = (indent == 0)
+    
+    # Sort keys if requested
+    if sort_keys and isinstance(obj, dict):
+        obj = dict(sorted(obj.items()))
     
     encoder = ToonEncoder(compact=compact, smart_optimize=smart_optimize)
     return encoder.encode(obj)

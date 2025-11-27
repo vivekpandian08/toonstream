@@ -1,16 +1,16 @@
 # Examples
 
-Tutorials and example code for using toonlib.
+Tutorials and example code for using toonstream.
 
 ## Files
 
-- `toonlib_tutorial.ipynb` - Interactive Jupyter notebook with comprehensive examples
+- `toonstream_tutorial.ipynb` - Interactive Jupyter notebook with comprehensive examples
 
 ## Tutorial Contents
 
 The notebook covers:
 
-1. **Installation** - Setting up toonlib
+1. **Installation** - Setting up toonstream
 2. **Basic Usage** - Simple encoding and decoding
 3. **Smart Optimization** - Automatic tabular format for arrays
 4. **Data Types** - All supported Python types
@@ -22,11 +22,11 @@ The notebook covers:
 
 ### Jupyter Notebook
 ```bash
-jupyter notebook examples/toonlib_tutorial.ipynb
+jupyter notebook examples/toonstream_tutorial.ipynb
 ```
 
 ### VS Code
-1. Open `toonlib_tutorial.ipynb` in VS Code
+1. Open `toonstream_tutorial.ipynb` in VS Code
 2. Select Python kernel
 3. Run cells interactively
 
@@ -34,10 +34,10 @@ jupyter notebook examples/toonlib_tutorial.ipynb
 
 ### Basic Encoding
 ```python
-import toonlib
+import toonstream
 
 data = {"name": "John", "age": 30}
-toon_str = toonlib.encode(data)
+toon_str = toonstream.encode(data)
 ```
 
 ### Smart Optimization
@@ -46,12 +46,12 @@ employees = [
     {"id": 1, "name": "Alice", "salary": 50000},
     {"id": 2, "name": "Bob", "salary": 60000}
 ]
-toon_str = toonlib.encode(employees, smart_optimize=True)
+toon_str = toonstream.encode(employees, smart_optimize=True)
 ```
 
 ### Decoding
 ```python
-data = toonlib.decode(toon_str)
+data = toonstream.decode(toon_str)
 ```
 
 ## Use Cases

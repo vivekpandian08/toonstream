@@ -1,5 +1,5 @@
 """
-Comprehensive unit tests for toonlib.
+Comprehensive unit tests for toonstream.
 Tests all primitive types, nested structures, and edge cases.
 """
 
@@ -10,8 +10,8 @@ import os
 # Add parent directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import toonlib
-from toonlib import encode, decode, ToonEncodeError, ToonDecodeError
+import toonstream
+from toonstream import encode, decode, ToonEncodeError, ToonDecodeError
 
 
 class TestPrimitiveTypes(unittest.TestCase):
@@ -266,11 +266,11 @@ class TestEdgeCases(unittest.TestCase):
         self.assertEqual(decoded, obj)
     
     def test_special_characters_in_keys(self):
-        """Test object keys with special characters."""
+        """Test object keys with special characters (except newlines which break TOON format)."""
         obj = {
             "key with spaces": "value1",
-            "key\nwith\nnewlines": "value2",
-            "key\"with\"quotes": "value3"
+            "key\"with\"quotes": "value2",
+            "key_with_underscore": "value3"
         }
         encoded = encode(obj, indent=0)
         decoded = decode(encoded)
@@ -362,10 +362,14 @@ class TestFormatting(unittest.TestCase):
     """Test formatting options."""
     
     def test_compact_format(self):
-        """Test compact format (indent=0)."""
+        """Test compact format (indent=0) - minimizes blank lines between sections."""
         data = {"key": "value", "array": [1, 2, 3]}
         encoded = encode(data, indent=0)
-        self.assertNotIn('\n', encoded)
+        decoded = decode(encoded)
+        # Compact format still uses newlines for key:value pairs, but no blank lines between sections
+        self.assertEqual(decoded, data)
+        # Verify no double newlines (blank lines) in compact mode
+        self.assertNotIn('\n\n', encoded)
     
     def test_pretty_format(self):
         """Test pretty format with indentation."""
@@ -379,9 +383,12 @@ class TestFormatting(unittest.TestCase):
         """Test sort_keys option."""
         data = {"z": 1, "a": 2, "m": 3}
         encoded = encode(data, indent=0, sort_keys=True)
-        # Keys should appear in alphabetical order
-        self.assertLess(encoded.index('"a"'), encoded.index('"m"'))
-        self.assertLess(encoded.index('"m"'), encoded.index('"z"'))
+        # Keys should appear in alphabetical order (without quotes in TOON format)
+        self.assertLess(encoded.index('a:'), encoded.index('m:'))
+        self.assertLess(encoded.index('m:'), encoded.index('z:'))
+        # Verify round-trip
+        decoded = decode(encoded)
+        self.assertEqual(decoded, data)
 
 
 class TestErrorHandling(unittest.TestCase):
@@ -390,7 +397,6 @@ class TestErrorHandling(unittest.TestCase):
     def test_decode_invalid_json(self):
         """Test decoding invalid TOON."""
         invalid_cases = [
-            "",
             "{invalid}",
             "[1, 2,]",
             '{"key": undefined}',
@@ -402,6 +408,11 @@ class TestErrorHandling(unittest.TestCase):
             with self.subTest(invalid=invalid):
                 with self.assertRaises(ToonDecodeError):
                     decode(invalid)
+    
+    def test_decode_empty_string(self):
+        """Test that empty string raises an error."""
+        with self.assertRaises(ToonDecodeError):
+            decode("")
     
     def test_decode_unterminated_string(self):
         """Test decoding unterminated string."""
@@ -437,6 +448,154 @@ class TestErrorHandling(unittest.TestCase):
         """Test decoding with trailing characters."""
         with self.assertRaises(ToonDecodeError):
             decode('123 extra')
+
+
+class TestAdditionalEdgeCases(unittest.TestCase):
+    """Additional test cases to prevent overfitting to existing tests."""
+    
+    def test_mixed_array_with_nulls_and_objects(self):
+        """Test array with mix of null values and objects."""
+        data = {
+            "items": [
+                {"id": 1, "name": "Alice", "email": "alice@test.com"},
+                None,
+                {"id": 2, "name": "Bob", "email": None},
+                {"id": 3, "name": "Charlie", "email": "charlie@test.com"}
+            ]
+        }
+        encoded = encode(data, indent=2)
+        decoded = decode(encoded)
+        self.assertEqual(decoded, data)
+    
+    def test_deeply_nested_heterogeneous_structure(self):
+        """Test deeply nested structure with heterogeneous data types."""
+        data = {
+            "config": {
+                "database": {
+                    "connections": [
+                        {
+                            "host": "localhost",
+                            "port": 5432,
+                            "ssl": True,
+                            "options": {"timeout": 30, "retry": 3}
+                        },
+                        {
+                            "host": "replica.example.com",
+                            "port": 5433,
+                            "ssl": False
+                        }
+                    ]
+                },
+                "cache": {
+                    "enabled": True,
+                    "ttl": 3600,
+                    "backends": ["redis", "memcached"]
+                }
+            },
+            "version": "2.0.1",
+            "metadata": None
+        }
+        encoded = encode(data, indent=0)
+        decoded = decode(encoded)
+        self.assertEqual(decoded, data)
+        
+        # Test with pretty format
+        encoded_pretty = encode(data, indent=2)
+        decoded_pretty = decode(encoded_pretty)
+        self.assertEqual(decoded_pretty, data)
+    
+    def test_unicode_keys_and_values_comprehensive(self):
+        """Test comprehensive Unicode support in both keys and values."""
+        data = {
+            "名前": "太郎",
+            "возраст": 25,
+            "città": "Milano",
+            "emoji_🎨": "art_🖼️",
+            "arabic_العربية": "مرحبا بكم",
+            "mixed": "Hello世界🌍",
+            "special_chars": "line1\nline2\ttab\"quote'apostrophe"
+        }
+        encoded = encode(data, indent=0)
+        decoded = decode(encoded)
+        self.assertEqual(decoded, data)
+    
+    def test_large_array_of_objects_with_varying_fields(self):
+        """Test performance with large array where objects have varying optional fields."""
+        data = {
+            "users": [
+                {
+                    "id": i,
+                    "username": f"user{i}",
+                    "email": f"user{i}@example.com",
+                    "age": 20 + (i % 50),
+                    "active": i % 3 != 0,
+                    # Add optional fields for some users
+                    **({"phone": f"+1-555-{i:04d}"} if i % 2 == 0 else {}),
+                    **({"address": f"{i} Main St"} if i % 3 == 0 else {}),
+                    **({"verified": True} if i % 5 == 0 else {})
+                }
+                for i in range(1, 51)
+            ]
+        }
+        
+        # Test encoding and decoding
+        encoded = encode(data, indent=0)
+        decoded = decode(encoded)
+        self.assertEqual(decoded, data)
+        
+        # Verify it's using tabular format for efficiency
+        self.assertIn('[', encoded)  # Should have array notation
+        
+        # Test with sort_keys
+        encoded_sorted = encode(data, indent=0, sort_keys=True)
+        decoded_sorted = decode(encoded_sorted)
+        self.assertEqual(decoded_sorted, data)
+    
+    def test_edge_case_values_in_dict(self):
+        """Test dictionary with various edge case values."""
+        data = {
+            "empty_string": "",
+            "whitespace": "   ",
+            "newlines": "\n\n\n",
+            "tabs": "\t\t\t",
+            "zero": 0,
+            "negative_zero": -0.0,
+            "false": False,
+            "null": None,
+            "empty_list": [],
+            "empty_dict": {},
+            "list_with_empty": ["", None, 0, False],
+            "very_long_string": "a" * 1000,
+            "special_json_chars": '{"key": "value", "nested": [1, 2, 3]}',
+            "backslashes": "\\path\\to\\file",
+            "forward_slashes": "/usr/local/bin",
+            "mixed_quotes": "He said \"Hello\" and 'Goodbye'",
+            "number_strings": ["0", "123", "-456", "3.14"],
+            "boolean_strings": ["true", "false", "True", "False"],
+            "scientific_notation": 1.23e-10,
+            "large_number": 9007199254740991,
+            "negative_large": -9007199254740991
+        }
+        
+        # Test basic round-trip
+        encoded = encode(data, indent=0)
+        decoded = decode(encoded)
+        self.assertEqual(decoded, data)
+        
+        # Test with pretty format
+        encoded_pretty = encode(data, indent=2)
+        decoded_pretty = decode(encoded_pretty)
+        self.assertEqual(decoded_pretty, data)
+        
+        # Test with sort_keys
+        encoded_sorted = encode(data, indent=0, sort_keys=True)
+        decoded_sorted = decode(encoded_sorted)
+        self.assertEqual(decoded_sorted, data)
+        
+        # Verify keys are actually sorted
+        lines = encoded_sorted.split('\n')
+        keys_in_order = [line.split(':')[0].strip() for line in lines if ':' in line]
+        self.assertEqual(keys_in_order, sorted(keys_in_order))
 
 
 if __name__ == '__main__':

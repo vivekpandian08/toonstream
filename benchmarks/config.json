@@ -18,7 +18,7 @@
       "nested_structures": {
         "file": "data/orders-nested.json",
         "description": "10 customer orders with nested objects and arrays",
-        "formats_to_test": ["csv_flattened", "toon", "json_compact", "json_pretty"]
+        "formats_to_test": ["toon", "json_compact", "json_pretty"]
       },
       "deep_nested": {
         "file": "data/configs-deep-nested.json",

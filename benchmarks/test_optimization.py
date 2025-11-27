@@ -31,8 +31,15 @@ Output:
 
 import json
 import time
+import sys
+import os
+from pathlib import Path
+
+# Add parent directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import tiktoken
-from toonlib import ToonEncoder
+from toonstream import ToonEncoder
 
 
 def count_tokens(text: str) -> int:

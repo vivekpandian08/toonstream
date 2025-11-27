@@ -1,5 +1,5 @@
 """
-Custom exceptions for the toonlib library.
+Custom exceptions for the toonstream library.
 
 This module defines the exception hierarchy for TOON encoding/decoding operations.
 All exceptions inherit from ToonError for easy exception handling.

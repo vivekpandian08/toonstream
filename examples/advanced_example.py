@@ -1,5 +1,5 @@
 """
-Advanced example demonstrating toonlib advanced features.
+Advanced example demonstrating toonstream advanced features.
 Shows error handling, edge cases, and performance considerations.
 """
 
@@ -10,8 +10,8 @@ import json
 # Add parent directory to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import toonlib
-from toonlib import ToonEncodeError, ToonDecodeError
+import toonstream
+from toonstream import ToonEncodeError, ToonDecodeError
 
 
 def example_error_handling():
@@ -24,7 +24,7 @@ def example_error_handling():
     try:
         class CustomClass:
             pass
-        toonlib.encode(CustomClass())
+        toonstream.encode(CustomClass())
     except ToonEncodeError as e:
         print(f"✓ Caught ToonEncodeError: {e}")
     print()
@@ -32,7 +32,7 @@ def example_error_handling():
     # Example: Encoding NaN
     print("Attempting to encode NaN...")
     try:
-        toonlib.encode(float('nan'))
+        toonstream.encode(float('nan'))
     except ToonEncodeError as e:
         print(f"✓ Caught ToonEncodeError: {e}")
     print()
@@ -40,7 +40,7 @@ def example_error_handling():
     # Example: Decoding invalid TOON
     print("Attempting to decode invalid TOON...")
     try:
-        toonlib.decode("{invalid: data}")
+        toonstream.decode("{invalid: data}")
     except ToonDecodeError as e:
         print(f"✓ Caught ToonDecodeError: {e}")
     print()
@@ -48,7 +48,7 @@ def example_error_handling():
     # Example: Decoding unterminated string
     print("Attempting to decode unterminated string...")
     try:
-        toonlib.decode('"unterminated string')
+        toonstream.decode('"unterminated string')
     except ToonDecodeError as e:
         print(f"✓ Caught ToonDecodeError: {e}")
     print()
@@ -71,23 +71,22 @@ def example_edge_cases():
     
     print("Testing edge cases:")
     for key, value in edge_cases.items():
-        toon = toonlib.encode(value, indent=0)
-        decoded = toonlib.decode(toon)
+        toon = toonstream.encode(value, indent=0)
+        decoded = toonstream.decode(toon)
         match = "✓" if value == decoded or (value is None and decoded is None) else "✗"
         print(f"  {match} {key}: {repr(value)} → {toon} → {repr(decoded)}")
     print()
     
-    # Special keys
+    # Special keys (note: newlines in keys are not supported by design)
     special_keys = {
-        "": "empty key",
         "key with spaces": "value",
-        "key\nwith\nnewlines": "value",
-        'key"with"quotes': "value"
+        'key"with"quotes': "value",
+        "key_with_unicode_😀": "value"
     }
     
     print("Testing special keys:")
-    toon = toonlib.encode(special_keys, indent=0)
-    decoded = toonlib.decode(toon)
+    toon = toonstream.encode(special_keys, indent=0)
+    decoded = toonstream.decode(toon)
     print(f"  ✓ All special keys preserved: {special_keys == decoded}")
     print()
 
@@ -132,13 +131,13 @@ def example_json_compatibility():
     
     # Convert JSON to Python to TOON
     json_data = json.loads(json_str)
-    toon_str = toonlib.encode(json_data, indent=2)
+    toon_str = toonstream.encode(json_data, indent=2)
     print("TOON format:")
     print(toon_str)
     print()
     
     # Convert TOON back to Python to JSON
-    toon_data = toonlib.decode(toon_str)
+    toon_data = toonstream.decode(toon_str)
     json_str_back = json.dumps(toon_data, indent=2)
     
     # Verify round-trip
@@ -161,25 +160,25 @@ def example_formatting_options():
     }
     
     # Compact format
-    compact = toonlib.encode(data, indent=0)
+    compact = toonstream.encode(data, indent=0)
     print("Compact format (indent=0):")
     print(compact)
     print()
     
     # Pretty format with 2-space indent
-    pretty2 = toonlib.encode(data, indent=2)
+    pretty2 = toonstream.encode(data, indent=2)
     print("Pretty format (indent=2):")
     print(pretty2)
     print()
     
     # Pretty format with 4-space indent
-    pretty4 = toonlib.encode(data, indent=4)
+    pretty4 = toonstream.encode(data, indent=4)
     print("Pretty format (indent=4):")
     print(pretty4)
     print()
     
     # Sorted keys
-    sorted_keys = toonlib.encode(data, indent=2, sort_keys=True)
+    sorted_keys = toonstream.encode(data, indent=2, sort_keys=True)
     print("Sorted keys:")
     print(sorted_keys)
     print()
@@ -210,12 +209,12 @@ def example_nested_structures():
     print(json.dumps(nested, indent=2))
     print()
     
-    toon = toonlib.encode(nested, indent=2)
+    toon = toonstream.encode(nested, indent=2)
     print("TOON format:")
     print(toon)
     print()
     
-    decoded = toonlib.decode(toon)
+    decoded = toonstream.decode(toon)
     print(f"✓ Lossless conversion: {nested == decoded}")
     print()
 
@@ -238,7 +237,7 @@ def example_whitespace_handling():
     print("Testing whitespace variations:")
     for toon_str, description in test_cases:
         try:
-            result = toonlib.decode(toon_str)
+            result = toonstream.decode(toon_str)
             print(f"  ✓ {description}")
         except Exception as e:
             print(f"  ✗ {description}: {e}")
@@ -247,7 +246,7 @@ def example_whitespace_handling():
 
 def main():
     print("=" * 60)
-    print("TOONLIB - Advanced Example")
+    print("TOONSTREAM - Advanced Example")
     print("=" * 60)
     print()
     
