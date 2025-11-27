@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "toonstream"
-version = "1.0.0"
+version = "1.0.1"
 description = "Token Oriented Object Notation - Efficient data serialization for LLMs"
 readme = "README.md"
 license = "MIT"
