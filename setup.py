@@ -13,7 +13,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="toonstream",
-    version="1.0.0",
+    version="1.0.1",
     author="Vivek Pandian",
     author_email="vivekpandian08@gmail.com",
     description="Token Oriented Object Notation - Efficient data serialization for LLMs",

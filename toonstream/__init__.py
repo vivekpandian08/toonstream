@@ -62,7 +62,7 @@ from .pickle_utils import (
     ToonPickleError
 )
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __all__ = [
     # Convenience functions (recommended API)
     "encode",

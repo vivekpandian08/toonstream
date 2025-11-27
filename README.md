@@ -3,7 +3,7 @@
 **Token-Oriented Object Notation (TOON) - Reduce LLM token usage by up to 55% with lossless data serialization**
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg)](https://github.com/vivekpandian08/toonstream)
+[![Version](https://img.shields.io/badge/version-1.0.1-brightgreen.svg)](https://github.com/vivekpandian08/toonstream)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://img.shields.io/badge/tests-100%25-brightgreen.svg)](tests/)
 
